@@ -1,0 +1,11 @@
+<script>
+
+parent.p();
+parent.cl();
+
+#if($error)
+alert("$error")
+#else
+alert("删除成功")
+#end
+</script>

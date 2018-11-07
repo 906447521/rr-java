@@ -1,0 +1,10 @@
+<script>
+
+parent.p();
+parent.cl();
+#if($error)
+alert("$error")
+#else
+alert("设置成功")
+#end
+</script>

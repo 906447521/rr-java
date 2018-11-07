@@ -1,0 +1,40 @@
+#set($title="上传版本")
+
+#loadCss("$!{context}/static/tool/prettify/prettify.css")
+#loadJs("$!{context}/static/tool/prettify/prettify.js")
+
+<style>
+    td {
+        font-size:12px;
+    }
+    td.time {
+        color: #999;
+    }
+</style>
+
+<div id="progress" class="waiting">
+    <dt></dt>
+    <dd></dd>
+</div>
+
+<div class="row">
+
+
+    <div class="col-sm-6">
+
+        #parse("client/savedowntestdate.vm")
+
+    </div>
+
+    <div class="fdv col-sm-6" dir="/rr">
+
+        #parse("client/printestinfo.vm")
+
+    </div>
+
+</div>
+
+
+<script>
+
+</script>

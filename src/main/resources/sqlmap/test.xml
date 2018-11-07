@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN "
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="scrr.Test">
+
+    <resultMap id="UserMap" type="com.telecom.rr.domain.User">
+        <result property="name" column="name"/>
+    </resultMap>
+
+    <sql id="table_name">user</sql>
+
+    <sql id="field_list">
+		name
+    </sql>
+
+    <select id="list" resultMap="UserMap">
+        SELECT
+        <include refid="field_list"/>
+        FROM
+        <include refid="table_name"/>
+        <include refid="condition"/>
+    </select>
+
+    <sql id="condition">
+        <where>
+            name=#{name}
+        </where>
+    </sql>
+
+</mapper>

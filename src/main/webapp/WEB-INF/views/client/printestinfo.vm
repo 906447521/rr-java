@@ -1,0 +1,9 @@
+
+<table class="table grid break">
+    <tr><th width="120">时间</th><th>信息</th></tr>
+#if($ptinfo && $ptinfo.size() > 0)
+    #foreach($i in $ptinfo)
+        <tr><td class="time">$dateTool.format("yy/MM/dd HH:mm:ss",$i.date)</td><td>$i</td></tr>
+    #end
+#end
+</table>

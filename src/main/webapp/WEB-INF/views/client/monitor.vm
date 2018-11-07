@@ -1,0 +1,45 @@
+#set($title="上传版本")
+
+#loadCss("$!{context}/static/tool/prettify/prettify.css")
+#loadJs("$!{context}/static/tool/prettify/prettify.js")
+
+<style>
+    td {
+        font-size:12px;
+    }
+    td.time {
+        color: #999;
+    }
+</style>
+
+<div id="progress" class="waiting">
+    <dt></dt>
+    <dd></dd>
+</div>
+
+<div class="row">
+
+    <div class="col-sm-12">
+
+        <table class="table grid break">
+            <tr><th width="230">ID</th><th width="120">时间</th><th width="80">版本</th><th>信息</th></tr>
+            #if($mtinfo && $mtinfo.size() > 0)
+                #foreach($i in $mtinfo)
+                    <tr>
+                        <td>$i.Id</td>
+                        <td class="time">$dateTool.format("yy/MM/dd HH:mm:ss",$i.lastestDate)</td>
+                        <td>$i.Version</td>
+                        <td>$i</td>
+                    </tr>
+                #end
+            #end
+        </table>
+
+    </div>
+
+</div>
+
+
+<script>
+
+</script>

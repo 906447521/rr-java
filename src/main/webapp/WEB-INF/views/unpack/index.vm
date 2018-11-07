@@ -1,0 +1,298 @@
+#set($title="上传版本")
+
+#loadCss("$!{context}/static/tool/prettify/prettify.css")
+#loadJs("$!{context}/static/tool/prettify/prettify.js")
+
+<style>
+    #progress {
+        position: fixed;
+        z-index: 2147483647;
+        top: 0;
+        left: -6px;
+        width: 0%;
+        height: 2px;
+        background: #b91f1f;
+        border-radius: 1px;
+    }
+
+    #progress.start {
+        -moz-transition: width 500ms ease-out, opacity 500ms linear;
+        -webkit-transition: width 500ms ease-out, opacity 500ms linear;
+        transition: width 500ms ease-out, opacity 500ms linear
+    }
+
+    #progress.done {
+        opacity: 0
+    }
+
+    #progress dd, #progress dt {
+        position: absolute;
+        top: 0;
+        height: 2px;
+        box-shadow: #b91f1f 1px 0 6px 1px;
+        border-radius: 100%
+    }
+
+    #progress dd {
+        opacity: .6;
+        width: 20px;
+        right: 0;
+        clip: rect(-6px, 22px, 14px, 10px)
+    }
+
+    #progress dt {
+        opacity: .6;
+        width: 180px;
+        right: -80px;
+        clip: rect(-6px, 90px, 14px, -6px)
+    }
+
+    #progress.waiting dd, #progress.waiting dt {
+        -moz-animation: pulse 2s ease-out 0s infinite;
+        -webkit-animation: pulse 2s ease-out 0s infinite;
+        animation: pulse 2s ease-out 0s infinite
+    }
+
+    .fd {
+
+    }
+
+    .fd * {
+        font-size: 14px;
+        font-family: SimSun !important
+    }
+
+    .fd a {
+        color: #08c;
+        padding-left: 4px;
+    }
+
+    .fd div {
+        padding: 0px;
+        margin-left: 5px;
+        line-height: 24px
+    }
+
+    .fd span {
+        padding-right: 3px;
+
+    }
+
+    .event:hover, .file:hover {
+        background: #ffffaa
+    }
+
+    /*input[type="file"]{*/
+    /*opacity:0;*/
+    /*filter:alpha(opacity=0);*/
+    /*font-size:100px;*/
+    /*position:absolute;*/
+    /*top:0;*/
+    /*right:0;*/
+    /*}*/
+</style>
+
+<div id="progress" class="waiting">
+    <dt></dt>
+    <dd></dd>
+</div>
+
+<div class="row">
+
+
+    <div class="col-sm-6">
+
+
+        <div>
+            <pre class="prettyprint linenums lang-c">$!{unpackxml}</pre>
+        </div>
+
+        <div>
+            <pre class="prettyprint linenums lang-c">$!{enabled}</pre>
+        </div>
+
+        <div>
+            <pre class="prettyprint linenums lang-c">$!{filelist}</pre>
+        </div>
+
+    </div>
+
+    <div class="fdv col-sm-6" dir="/rr">
+
+    ##    <div>${dir}</div>
+        #parse("unpack/formenabled.vm")
+
+        #parse("unpack/formupload.vm")
+
+        <div class="fd">
+            <div class="context"></div>
+        </div>
+
+
+    </div>
+##    <div class="span2"></div>
+
+</div>
+
+<form class="rmvs" target="post_iframe" action="${context}/unpack/remove" method="post">
+    <input type="hidden" name="dir">
+</form>
+
+<iframe name="post_iframe" id="post_iframe" style="display:none"></iframe>
+
+<script>
+
+    function p() {
+        var p = $("#progress");
+        p.css("width", "100%");
+    }
+    function s() {
+        var p = $("#progress");
+        p.addClass("start")
+        p.css("display", "block").css("width", "60%")
+    }
+
+    function e() {
+        var p = $("#progress");
+        p.removeClass("start")
+        p.removeAttr("style")
+    }
+
+    function c(dir) {
+        e();
+        s()
+        var f = $(".rmvs")
+        f.find("input[name='dir']").val(dir)
+        f.submit()
+    }
+
+    function vers() {
+        e();
+        s()
+//        var f = $(".vers")
+//        f.submit()
+    }
+
+    function cr($fd, result) {
+        if (result.body.length > 0) {
+            for (i in result.body) {
+                f = result.body[i]
+                if (f.directory) {
+                    var dic = $("<div>")
+                    dic.addClass("directory")
+                    dic.attr("dir", f.dir)
+
+                    var eve = $("<div>")
+                    eve.attr("title", new Date(f.lastModify).format('yyyy-MM-dd hh:mm:ss'))
+                    eve.addClass("event")
+
+                    var spn = $("<span>")
+                    spn.attr("onclick", "fd($(this).parent())")
+                    spn.append("<span class=\"glyphicon glyphicon-folder-close\"></span>")
+
+                    var ctx = $("<div>")
+                    ctx.addClass("context")
+
+                    var rmv = $("<a>")
+                    rmv.attr("href", "javascript:c('" + f.dir + "')")
+                    rmv.html("Remove")
+                    rmv.css("float", "right")
+
+                    eve.append(spn)
+                    eve.append(f.name)
+                    eve.append(rmv)
+
+                    dic.append(eve)
+                    dic.append(ctx)
+
+
+
+
+                    $fd.append(dic)
+
+                } else {
+                    var file = $("<div>")
+                    file.addClass("file")
+                    file.attr("dir", f.dir)
+
+                    var nam = $("<a>")
+                    nam.attr("title", new Date(f.lastModify).format('yyyy-MM-dd hh:mm:ss'))
+                    nam.html(f.name)
+
+                    var rmv = $("<a>")
+                    rmv.attr("href", "javascript:c('" + f.dir + "')")
+                    rmv.html("Remove")
+                    rmv.css("float", "right")
+
+                    file.append("&nbsp;&nbsp;&nbsp;")
+                    file.append(nam)
+                    file.append(rmv)
+                    file.append("<span style=\"float:right\">" + f.md5 + "</span>")
+
+                    $fd.append(file)
+                }
+            }
+        }
+    }
+
+    function fd(t) {
+        var p = t.parent();
+        var d = p.attr("dir");
+        var e = p.attr("ed");
+        if (!e) {
+            $.post("${context}/unpack/list", {"dir": d}, function (r) {
+                if (r.code == 0) {
+                    t.find("span").html("<span class=\"glyphicon glyphicon-folder-open\"></span>");
+                    var $fd =
+                    p.find(".context")
+                    cr($fd, r);
+                    p.attr("ed", "true");
+                } else {
+                    alert(result.tip)
+                }
+
+            })
+        } else {
+            if (e == "true") {
+                p.find(".context").css("display", "none");
+                t.find("span").html("<span class=\"glyphicon glyphicon-folder-close\"></span>");
+                p.attr("ed", "false");
+            } else {
+                p.find(".context").css("display", "block");
+                t.find("span").html("<span class=\"glyphicon glyphicon-folder-open\"></span>");
+                p.attr("ed", "true");
+            }
+        }
+    }
+
+    function cl() {
+//        $(".fd .context").html("")
+//        $(".fd").parent().removeAttr("ed");
+//        fd($(".fd"));
+
+        window.location.reload()
+    }
+
+    Date.prototype.format = function (format) {
+        var o = {
+            "M+": this.getMonth() + 1, //month
+            "d+": this.getDate(),    //day
+            "h+": this.getHours(),   //hour
+            "m+": this.getMinutes(), //minute
+            "s+": this.getSeconds(), //second
+            "q+": Math.floor((this.getMonth() + 3) / 3),  //quarter
+            "S": this.getMilliseconds() //millisecond
+        }
+        if (/(y+)/.test(format)) format = format.replace(RegExp.$1,
+                (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)if (new RegExp("(" + k + ")").test(format))
+            format = format.replace(RegExp.$1,
+                            RegExp.$1.length == 1 ? o[k] :
+                            ("00" + o[k]).substr(("" + o[k]).length));
+        return format;
+    }
+
+    fd($(".fd"));
+    document.getElementById("progress").addEventListener("transitionend", s, true);
+    prettyPrint();
+</script>

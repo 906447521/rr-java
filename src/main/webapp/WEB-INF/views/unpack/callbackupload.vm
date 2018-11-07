@@ -1,0 +1,11 @@
+<script>
+
+parent.p();
+parent.cl();
+
+#if($error)
+alert("$error")
+#else
+alert("上传成功")
+#end
+</script>

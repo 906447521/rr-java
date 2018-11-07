@@ -1,0 +1,8 @@
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>四川高宽带测速仪-$!title</title>
+##<link href="../favicon.ico" type="image/x-icon" rel="shortcut icon"/>
+#loadCss("$!{context}/static/css/bootstrap.css")
+#loadCss("$!{context}/static/css/bootstrap-glyphicons.css")
+#loadCss("$!{context}/static/css/full.css")
+#loadJs("$!{context}/static/js/jquery.js")
+#loadJs("$!{context}/static/js/bootstrap.js")

@@ -1,0 +1,8 @@
+## 加载JS
+#macro(loadJs $url)
+<script src="$!{url}$!{version}" type="text/javascript"></script>
+#end
+##加载CSS
+#macro(loadCss $url)
+<link href="$!{url}$!{version}" type="text/css" rel="stylesheet" />
+#end

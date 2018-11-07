@@ -1,0 +1,32 @@
+<form class="enabled form-horizontal" target="post_iframe" action="${context}/unpack/enabled"
+      enctype="multipart/form-data"
+      method="post">
+
+    <div class="form-group">
+
+        <label class="col-sm-3 control-label">自动更新</label>
+
+        <div class="col-sm-8">
+            <input type="hidden" id="enabled_input" name="enabled">
+            <input style="margin-top:10px" type="checkbox" enabled="$!{enabled}"
+                #if($enabled == "1")
+                   checked
+                #end
+                   onclick="enabledClick($(this))"/>
+        </div>
+
+    </div>
+</form>
+
+
+<script>
+    function enabledClick($this) {
+        enab = $this.attr("enabled")
+        if (enab && enab == "1") {
+            $("#enabled_input").val("0")
+        } else {
+            $("#enabled_input").val("1")
+        }
+        $(".enabled").submit()
+    }
+</script>
